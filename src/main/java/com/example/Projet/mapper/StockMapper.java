@@ -11,12 +11,6 @@ public class StockMapper {
         return Stock.builder()
                 .id(entity.getId())
                 .symbol(entity.getSymbol())
-                .open(entity.getOpen())
-                .close(entity.getClose())
-                .high(entity.getHigh())
-                .low(entity.getLow())
-                .volume(entity.getVolume())
-                .count(entity.getCount())
                 .build();
     }
 
@@ -27,12 +21,6 @@ public class StockMapper {
         return StockEntity.builder()
                 .id(model.id())
                 .symbol(model.symbol())
-                .open(model.open())
-                .close(model.close())
-                .high(model.high())
-                .low(model.low())
-                .volume(model.volume())
-                .count(model.count())
                 .build();
     }
 }

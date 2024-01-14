@@ -22,17 +22,24 @@ public class StockEntity {
     private UUID id;
     @Column(name="Symbol")
     private String symbol;
-    @Column(name="Open")
-    Map<String, Float> open = new HashMap<>();
-    @Column(name="Close")
-    Map<String, Float> close = new HashMap<>();
-    @Column(name="High")
-    Map<String, Float> high = new HashMap<>();
-    @Column(name="Low")
-    Map<String, Float> low = new HashMap<>();
-    @Column(name = "Volume")
-    Map<String, Float> volume = new HashMap<>();
-    @Column(name = "Count")
-    Map<String, Float> count = new HashMap<>();
+    @Column(name="Stock Values")
+    @OneToMany(cascade = CascadeType.ALL)
+    public Map<String, StockValuesEntity> getStockValuesMap=new HashMap<>();
+    
+}
+
+
+  //  @Column(name="Open")
+  //   Map<String, Float> open = new HashMap<>();
+  //   @Column(name="Close")
+  //Map<String, Float> close = new HashMap<>();
+  //@Column(name="High")
+  //Map<String, Float> high = new HashMap<>();
+  ////@Column(name="Low")
+  //Map<String, Float> low = new HashMap<>();
+  //@Column(name = "Volume")
+  //Map<String, Float> volume = new HashMap<>();
+  //@Column(name = "Count")
+    //Map<String, Float> count = new HashMap<>();
 
 }

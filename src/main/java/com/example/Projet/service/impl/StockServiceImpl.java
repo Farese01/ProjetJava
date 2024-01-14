@@ -1,5 +1,7 @@
 package com.example.Projet.service.impl;
 
+import com.example.Projet.entity.StockValues;
+import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
 import com.example.Projet.service.StockService;
 import com.example.Projet.domain.Stock;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,7 +28,14 @@ public class StockServiceImpl implements StockService{
     }
 
     @Override
-    public StockEntity findBySymbol(String symbol) {
-        return null;
+    public Optional<Stock> findBySymbol(String symbol) {
+        Optional<StockEntity> entityOptional = stockEntityRepository.findBySymbol(symbol);
+        return entityOptional.map(StockMapper::toStock);
+    }
+
+    @Override
+    public Optional<StockValues> findStockValuesBySymbolAndDate(String symbol, String date) {
+        Optional<StockEntity> entityOptional = stockEntityRepository.findBySymbol(symbol);
+        return entityOptional.map(entity -> StockValuesMapper.toStockValues(entity.getStockValuesMap().get(date)));
     }
 }
