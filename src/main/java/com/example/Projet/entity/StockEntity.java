@@ -1,13 +1,13 @@
 package com.example.Projet.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "stock")
@@ -29,4 +29,7 @@ public class StockEntity {
     Map<String, Float> low = new HashMap<>();
     @Column(name = "Volume")
     Map<String, Float> volume = new HashMap<>();
+    @Column(name = "Count")
+    Map<String, Float> count = new HashMap<>();
+
 }
