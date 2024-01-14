@@ -7,7 +7,6 @@ import java.util.UUID;
 @Builder
 public record Stock(
         UUID id,
-        String symbol,
-        Map<String, Float> open,
+        String symbol
 ) {
 }
