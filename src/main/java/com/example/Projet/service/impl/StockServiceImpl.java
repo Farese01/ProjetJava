@@ -23,4 +23,9 @@ public class StockServiceImpl implements StockService{
         List<StockEntity> entities = stockEntityRepository.findAll();
         return StockMapper.toList(entities);
     }
+
+    @Override
+    public StockEntity findBySymbol(String symbol) {
+        return null;
+    }
 }
