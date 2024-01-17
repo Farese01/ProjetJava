@@ -40,28 +40,18 @@ public class StockServiceImpl implements StockService {
 
         if (stockEntityOptional.isPresent()) {
             StockEntity stockEntity = stockEntityOptional.get();
-            Map<String, Float> closeValues = stockEntity.getClose();
-            Map<String, Float> openValues = stockEntity.getOpen();
-            Map<String, Float> lowValues = stockEntity.getLow();
-            Map<String, Float> highValues = stockEntity.getHigh();
-            Map<String, Float> volumeValues = stockEntity.getVolume();
             Map<String, Float> countMap = stockEntity.getCount();
 
             countMap.put(targetDate, countMap.getOrDefault(targetDate, 0f) + 1);
-            if (closeValues.containsKey(targetDate)) {
-                Float closeValue = closeValues.get(targetDate);
-                Float openValue = openValues.get(targetDate);
-                Float lowValue = lowValues.get(targetDate);
-                Float highValue = highValues.get(targetDate);
-                Float volumeValue = volumeValues.get(targetDate);
+            if (stockEntity.getClose().containsKey(targetDate)) {
                 return StockPriceDTO.builder()
                         .symbol(symbol)
                         .date(targetDate)
-                        .openValue(openValue)
-                        .closeValue(closeValue)
-                        .lowValue(lowValue)
-                        .highValue(highValue)
-                        .volumeValue(volumeValue)
+                        .openValue(stockEntity.getOpen().get(targetDate))
+                        .closeValue(stockEntity.getClose().get(targetDate))
+                        .lowValue(stockEntity.getLow().get(targetDate))
+                        .highValue(stockEntity.getHigh().get(targetDate))
+                        .volumeValue(stockEntity.getVolume().get(targetDate))
                         .build();
             }
         }
