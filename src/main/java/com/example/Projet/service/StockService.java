@@ -8,4 +8,5 @@ public interface StockService {
     List<Stock> findAll();
     StockEntity findBySymbol(String symbol);
 
+
 }

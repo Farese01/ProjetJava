@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +27,8 @@ public class StockServiceImpl implements StockService{
 
     @Override
     public StockEntity findBySymbol(String symbol) {
-        return null;
+        return stockEntityRepository.findBySymbol(symbol)
+                .orElse(null);
     }
+    
 }
