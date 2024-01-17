@@ -4,6 +4,7 @@ import com.example.Projet.entity.StockEntity;
 import com.example.Projet.domain.Stock;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StockMapper {
@@ -23,7 +24,7 @@ public class StockMapper {
     public static List<Stock> toList(List<StockEntity> stockEntityList) {
         return stockEntityList.stream().map(StockMapper::toStock).collect(Collectors.toList());
     }
-    public static StockEntity toStudentEntity(Stock model) {
+    public static StockEntity toStockEntity(Stock model) {
         return StockEntity.builder()
                 .id(model.id())
                 .symbol(model.symbol())
