@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -67,6 +69,37 @@ public class StockServiceImpl implements StockService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo) {
+        try {
+            Optional<StockEntity> stockEntityOptional = Optional.ofNullable(stockEntityRepository.findBySymbol(symbol));
+
+            if (stockEntityOptional.isPresent()) {
+                StockEntity stockEntity = stockEntityOptional.get();
+                return stockEntity.getOpen().entrySet().stream()
+                        .filter(entry -> {
+                            String currentDate = entry.getKey();
+                            return currentDate.compareTo(dateFrom) >= 0 && currentDate.compareTo(dateTo) <= 0;
+                        })
+                        .map(entry -> StockPriceDTO.builder()
+                                .symbol(symbol)
+                                .date(entry.getKey())
+                                .openValue(entry.getValue())
+                                .closeValue(stockEntity.getClose().get(entry.getKey()))
+                                .lowValue(stockEntity.getLow().get(entry.getKey()))
+                                .highValue(stockEntity.getHigh().get(entry.getKey()))
+                                .volumeValue(stockEntity.getVolume().get(entry.getKey()))
+                                .build())
+                        .collect(Collectors.toList());
+            }
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., parsing, database access)
+            log.error("Error retrieving stock prices", e);
+        }
+
+        return Collections.emptyList();
     }
 }
 

@@ -31,4 +31,18 @@ public class StockController {
         private String symbol;
         private String date;
     }
+
+    @GetMapping("/prices-between-dates")
+    public List<StockPriceDTO> getStockPricesBetweenDates(@RequestBody StockPriceRequestDates request) {
+        String symbol = request.getSymbol();
+        String dateFrom = request.getDateFrom();
+        String dateTo = request.getDateTo();
+        return stockService.getStockPricesBetweenDates(symbol, dateFrom, dateTo);
+    }
+    @Data
+    public static class StockPriceRequestDates {
+        private String symbol;
+        private String dateFrom;
+        private String dateTo;
+    }
 }

@@ -11,6 +11,7 @@ public interface StockService {
     List<Stock> findAll();
     Stock findBySymbol(String symbol) throws Exception;
     StockPriceDTO getStockPriceByDate(String symbol, String targetDate);
+    List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo);
 
 
 }
