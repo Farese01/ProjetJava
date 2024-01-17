@@ -78,24 +78,31 @@ public class StockServiceImpl implements StockService {
 
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
+                Map<String, Float> countMap = stockEntity.getCount(); // Assuming count is stored in a map
+
                 return stockEntity.getOpen().entrySet().stream()
                         .filter(entry -> {
                             String currentDate = entry.getKey();
                             return currentDate.compareTo(dateFrom) >= 0 && currentDate.compareTo(dateTo) <= 0;
                         })
-                        .map(entry -> StockPriceDTO.builder()
-                                .symbol(symbol)
-                                .date(entry.getKey())
-                                .openValue(entry.getValue())
-                                .closeValue(stockEntity.getClose().get(entry.getKey()))
-                                .lowValue(stockEntity.getLow().get(entry.getKey()))
-                                .highValue(stockEntity.getHigh().get(entry.getKey()))
-                                .volumeValue(stockEntity.getVolume().get(entry.getKey()))
-                                .build())
+                        .map(entry -> {
+                            String currentDate = entry.getKey();
+                            countMap.put(currentDate, countMap.getOrDefault(currentDate, 0f) + 1);
+
+                            return StockPriceDTO.builder()
+                                    .symbol(symbol)
+                                    .date(currentDate)
+                                    .openValue(entry.getValue())
+                                    .closeValue(stockEntity.getClose().get(currentDate))
+                                    .lowValue(stockEntity.getLow().get(currentDate))
+                                    .highValue(stockEntity.getHigh().get(currentDate))
+                                    .volumeValue(stockEntity.getVolume().get(currentDate))
+                                    .build();
+                            })
                         .collect(Collectors.toList());
             }
-        } catch (Exception e) {
-            // Handle any exceptions (e.g., parsing, database access)
+        }
+        catch (Exception e) {
             log.error("Error retrieving stock prices", e);
         }
 
