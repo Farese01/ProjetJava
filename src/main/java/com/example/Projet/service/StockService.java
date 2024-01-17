@@ -5,6 +5,7 @@ import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.entity.StockEntity;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface StockService {
@@ -14,4 +15,5 @@ public interface StockService {
     List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo);
 
 
+    Map.Entry<String, Float> findMostSearchedStock();
 }

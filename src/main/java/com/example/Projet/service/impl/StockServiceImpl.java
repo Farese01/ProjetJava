@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,6 +104,29 @@ public class StockServiceImpl implements StockService {
         }
 
         return Collections.emptyList();
+    }
+
+
+    public Map.Entry<String, Float> findMostSearchedStock() {
+        try {
+            List<StockEntity> stockEntities = stockEntityRepository.findAll();
+
+            // Map to store stock symbol and its total count
+            Map<String, Float> totalCountMap = new HashMap<>();
+
+            // Iterate through each stock entity and sum up the counts
+            stockEntities.forEach(stockEntity -> {
+                stockEntity.getCount().forEach((date, count) -> {
+                    totalCountMap.put(stockEntity.getSymbol(), totalCountMap.getOrDefault(stockEntity.getSymbol(), 0f) + count);
+                });
+            });
+
+            return Collections.max(totalCountMap.entrySet(), Map.Entry.comparingByValue());
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., database access)
+            log.error("Error finding most searched stock", e);
+            return null;
+        }
     }
 }
 

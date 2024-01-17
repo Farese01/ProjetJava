@@ -6,6 +6,7 @@ import com.example.Projet.domain.Stock;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,5 +45,10 @@ public class StockController {
         private String symbol;
         private String dateFrom;
         private String dateTo;
+    }
+
+    @GetMapping("/most-searched")
+    public Optional<Map.Entry<String, Float>> getMostSearchedStock() {
+        return Optional.ofNullable(stockService.findMostSearchedStock());
     }
 }
