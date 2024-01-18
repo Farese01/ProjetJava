@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,28 +40,18 @@ public class StockServiceImpl implements StockService {
 
         if (stockEntityOptional.isPresent()) {
             StockEntity stockEntity = stockEntityOptional.get();
-            Map<String, Float> closeValues = stockEntity.getClose();
-            Map<String, Float> openValues = stockEntity.getOpen();
-            Map<String, Float> lowValues = stockEntity.getLow();
-            Map<String, Float> highValues = stockEntity.getHigh();
-            Map<String, Float> volumeValues = stockEntity.getVolume();
             Map<String, Float> countMap = stockEntity.getCount();
 
             countMap.put(targetDate, countMap.getOrDefault(targetDate, 0f) + 1);
-            if (closeValues.containsKey(targetDate)) {
-                Float closeValue = closeValues.get(targetDate);
-                Float openValue = openValues.get(targetDate);
-                Float lowValue = lowValues.get(targetDate);
-                Float highValue = highValues.get(targetDate);
-                Float volumeValue = volumeValues.get(targetDate);
+            if (stockEntity.getClose().containsKey(targetDate)) {
                 return StockPriceDTO.builder()
                         .symbol(symbol)
                         .date(targetDate)
-                        .openValue(openValue)
-                        .closeValue(closeValue)
-                        .lowValue(lowValue)
-                        .highValue(highValue)
-                        .volumeValue(volumeValue)
+                        .openValue(stockEntity.getOpen().get(targetDate))
+                        .closeValue(stockEntity.getClose().get(targetDate))
+                        .lowValue(stockEntity.getLow().get(targetDate))
+                        .highValue(stockEntity.getHigh().get(targetDate))
+                        .volumeValue(stockEntity.getVolume().get(targetDate))
                         .build();
             }
         }
@@ -78,28 +65,58 @@ public class StockServiceImpl implements StockService {
 
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
+                Map<String, Float> countMap = stockEntity.getCount(); // Assuming count is stored in a map
+
                 return stockEntity.getOpen().entrySet().stream()
                         .filter(entry -> {
                             String currentDate = entry.getKey();
                             return currentDate.compareTo(dateFrom) >= 0 && currentDate.compareTo(dateTo) <= 0;
                         })
-                        .map(entry -> StockPriceDTO.builder()
-                                .symbol(symbol)
-                                .date(entry.getKey())
-                                .openValue(entry.getValue())
-                                .closeValue(stockEntity.getClose().get(entry.getKey()))
-                                .lowValue(stockEntity.getLow().get(entry.getKey()))
-                                .highValue(stockEntity.getHigh().get(entry.getKey()))
-                                .volumeValue(stockEntity.getVolume().get(entry.getKey()))
-                                .build())
+                        .map(entry -> {
+                            String currentDate = entry.getKey();
+                            countMap.put(currentDate, countMap.getOrDefault(currentDate, 0f) + 1);
+
+                            return StockPriceDTO.builder()
+                                    .symbol(symbol)
+                                    .date(currentDate)
+                                    .openValue(entry.getValue())
+                                    .closeValue(stockEntity.getClose().get(currentDate))
+                                    .lowValue(stockEntity.getLow().get(currentDate))
+                                    .highValue(stockEntity.getHigh().get(currentDate))
+                                    .volumeValue(stockEntity.getVolume().get(currentDate))
+                                    .build();
+                            })
                         .collect(Collectors.toList());
             }
-        } catch (Exception e) {
-            // Handle any exceptions (e.g., parsing, database access)
+        }
+        catch (Exception e) {
             log.error("Error retrieving stock prices", e);
         }
 
         return Collections.emptyList();
+    }
+
+
+    public Map.Entry<String, Float> findMostSearchedStock() {
+        try {
+            List<StockEntity> stockEntities = stockEntityRepository.findAll();
+
+            // Map to store stock symbol and its total count
+            Map<String, Float> totalCountMap = new HashMap<>();
+
+            // Iterate through each stock entity and sum up the counts
+            stockEntities.forEach(stockEntity -> {
+                stockEntity.getCount().forEach((date, count) -> {
+                    totalCountMap.put(stockEntity.getSymbol(), totalCountMap.getOrDefault(stockEntity.getSymbol(), 0f) + count);
+                });
+            });
+
+            return Collections.max(totalCountMap.entrySet(), Map.Entry.comparingByValue());
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., database access)
+            log.error("Error finding most searched stock", e);
+            return null;
+        }
     }
 }
 
