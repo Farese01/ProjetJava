@@ -1,19 +1,24 @@
 package com.example.Projet.service.impl;
 
-import com.example.Projet.entity.StockValues;
-import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
 import com.example.Projet.service.StockService;
-import com.example.Projet.domain.Stock;
-import com.example.Projet.mapper.StockMapper;
 import com.example.Projet.entity.StockEntity;
+import com.example.Projet.entity.DailyStockPrice;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Map;
+import java.io.IOException;
+import java.util.Iterator;
 
 @Service
 @AllArgsConstructor
@@ -21,9 +26,70 @@ import java.util.Optional;
 
 public class StockServiceImpl implements StockService{
     private final StockEntityRepository stockEntityRepository;
-<<<<<<< Updated upstream
+
     @Override
-=======
+    public List<StockEntity> findAll() {
+        return stockEntityRepository.findAll();
+    }
+
+    public void fetchDataAndSave(String symbol) {
+        // Step 1: Use a REST client to fetch JSON data from the API
+        String apiUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&apikey=029SGZKEAAOV9PXE"; // Replace with the actual API URL
+        RestTemplate restTemplate = new RestTemplate();
+        String jsonString = restTemplate.getForObject(apiUrl, String.class);
+
+        // Step 2: Parse JSON data and map it to entity classes
+        StockEntity stockEntity = mapJsonToEntity(jsonString);
+
+        // Step 3: Save the entities to the repository
+        stockEntityRepository.save(stockEntity);
+    }
+
+    private StockEntity mapJsonToEntity(String jsonString) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        StockEntity stockEntity = new StockEntity();
+
+        try {
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+
+            // Extract meta data
+            JsonNode metaDataNode = jsonNode.path("Meta Data");
+            stockEntity.setSymbol(metaDataNode.path("2. Symbol").asText());
+            stockEntity.setLastRefreshed(LocalDate.parse(metaDataNode.path("3. Last Refreshed").asText()));
+
+            // Extract daily prices
+            JsonNode timeSeriesNode = jsonNode.path("Time Series (Daily)");
+            Iterator<Map.Entry<String, JsonNode>> datesIterator = timeSeriesNode.fields();
+
+            List<DailyStockPrice> dailyPrices = new ArrayList<>();
+
+            while (datesIterator.hasNext()) {
+                Map.Entry<String, JsonNode> dateEntry = datesIterator.next();
+                LocalDate date = LocalDate.parse(dateEntry.getKey());
+                JsonNode priceData = dateEntry.getValue();
+
+                DailyStockPrice dailyStockPrice = new DailyStockPrice();
+                dailyStockPrice.setStock(stockEntity);
+                dailyStockPrice.setDate(date);
+                dailyStockPrice.setOpen(priceData.path("1. open").asDouble());
+                dailyStockPrice.setHigh(priceData.path("2. high").asDouble());
+                dailyStockPrice.setLow(priceData.path("3. low").asDouble());
+                dailyStockPrice.setClose(priceData.path("4. close").asDouble());
+                dailyStockPrice.setVolume(priceData.path("5. volume").asLong());
+
+                dailyPrices.add(dailyStockPrice);
+            }
+
+            stockEntity.setDailyPrices(dailyPrices);
+
+        } catch (IOException e) {
+            // Handle JSON parsing errors
+            e.printStackTrace();
+        }
+
+        return stockEntity;
+    }
+
 
     /*@Override
 >>>>>>> Stashed changes
@@ -70,5 +136,5 @@ public class StockServiceImpl implements StockService{
     }*/
 
 
->>>>>>> Stashed changes
+
 }

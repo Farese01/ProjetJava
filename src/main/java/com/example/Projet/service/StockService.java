@@ -1,18 +1,14 @@
 package com.example.Projet.service;
 
-import com.example.Projet.domain.Stock;
-import com.example.Projet.entity.StockValues;
+import com.example.Projet.entity.StockEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface StockService {
-    List<Stock> findAll();
-<<<<<<< Updated upstream
-    Optional<Stock> findBySymbol(String symbol);
-    Optional<StockValues> findStockValuesBySymbolAndDate(String symbol, String date);
+    List<StockEntity> findAll();
+    void fetchDataAndSave(String symbol);
 
-=======
+
     /*List<Stock> findAll();
     Stock findBySymbol(String symbol) throws Exception;
     StockPriceDTO getStockPriceByDate(String symbol, String targetDate);
@@ -20,5 +16,5 @@ public interface StockService {
 
 
     Map.Entry<String, Float> findMostSearchedStock();*/
->>>>>>> Stashed changes
+
 }

@@ -1,9 +1,11 @@
 package com.example.Projet;
 
-<<<<<<< Updated upstream
+
+import com.example.Projet.service.StockService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-=======
+
 import com.example.Projet.entity.StockEntity;
 import com.example.Projet.repository.StockEntityRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,28 +20,23 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
->>>>>>> Stashed changes
+
 
 @SpringBootApplication
 public class ProjetApplication {
-
+	@Autowired
+	private StockService stockService;
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetApplication.class, args);
 	}
 
-<<<<<<< Updated upstream
-=======
-	/*@Bean
+	@Bean
 	public CommandLineRunner demo(StockEntityRepository stockRepository) {
 		return (args) -> {
-			RestTemplate restTemplate = new RestTemplate();
-			System.out.println(url("IBM"));
-			String jsonString = restTemplate.getForObject(url("IBM"), String.class);
-			List<StockEntity> stockList = mapJsonToEntities(jsonString);
-			stockRepository.saveAll(stockList);
-
+			stockService.fetchDataAndSave("AAPL");
+			System.out.println("Stock data fetched and saved successfully!");
 		};
-	}*/
+	}
 
->>>>>>> Stashed changes
+
 }

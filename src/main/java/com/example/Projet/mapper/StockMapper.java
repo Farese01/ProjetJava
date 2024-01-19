@@ -37,5 +37,5 @@ public class StockMapper {
                 .count(model.count())
                 .build();
     }*/
->>>>>>> Stashed changes
+
 }

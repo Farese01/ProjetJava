@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.*;
 @Entity
+@Table(name = "daily_stock_prices")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class DailyStockPrice {
 
     @Id
@@ -37,9 +42,6 @@ public class DailyStockPrice {
     private Long volume;
 
     // Constructors, getters, and setters...
-
-    public DailyStockPrice() {
-    }
 
     public DailyStockPrice(StockEntity stock, LocalDate date, Double open, Double high, Double low, Double close, Long volume) {
         this.stock = stock;

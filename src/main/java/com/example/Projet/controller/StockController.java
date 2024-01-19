@@ -1,15 +1,10 @@
 package com.example.Projet.controller;
-import com.example.Projet.entity.StockValues;
+import com.example.Projet.entity.StockEntity;
 import com.example.Projet.service.StockService;
 import lombok.AllArgsConstructor;
-import com.example.Projet.domain.Stock;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("stock")
@@ -17,9 +12,10 @@ import java.util.UUID;
 public class StockController {
     private final StockService stockService;
     @GetMapping()
-    public List<Stock> getAll() {
+    public List<StockEntity> getAll() {
         return stockService.findAll();
     }
+    /*
 <<<<<<< Updated upstream
 
     @GetMapping("/symbol/{symbol}/date/{date}")
@@ -61,5 +57,5 @@ public class StockController {
     public Optional<Map.Entry<String, Float>> getMostSearchedStock() {
         return Optional.ofNullable(stockService.findMostSearchedStock());
     }*/
->>>>>>> Stashed changes
+
 }
