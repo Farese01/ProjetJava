@@ -21,7 +21,12 @@ import java.util.Optional;
 
 public class StockServiceImpl implements StockService{
     private final StockEntityRepository stockEntityRepository;
+<<<<<<< Updated upstream
     @Override
+=======
+
+    /*@Override
+>>>>>>> Stashed changes
     public List<Stock> findAll() {
         List<StockEntity> entities = stockEntityRepository.findAll();
         return StockMapper.toList(entities);
@@ -38,4 +43,32 @@ public class StockServiceImpl implements StockService{
         Optional<StockEntity> entityOptional = stockEntityRepository.findBySymbol(symbol);
         return entityOptional.map(entity -> StockValuesMapper.toStockValues(entity.getStockValuesMap().get(date)));
     }
+<<<<<<< Updated upstream
+=======
+
+
+    public Map.Entry<String, Float> findMostSearchedStock() {
+        try {
+            List<StockEntity> stockEntities = stockEntityRepository.findAll();
+
+            // Map to store stock symbol and its total count
+            Map<String, Float> totalCountMap = new HashMap<>();
+
+            // Iterate through each stock entity and sum up the counts
+            stockEntities.forEach(stockEntity -> {
+                stockEntity.getCount().forEach((date, count) -> {
+                    totalCountMap.put(stockEntity.getSymbol(), totalCountMap.getOrDefault(stockEntity.getSymbol(), 0f) + count);
+                });
+            });
+
+            return Collections.max(totalCountMap.entrySet(), Map.Entry.comparingByValue());
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., database access)
+            log.error("Error finding most searched stock", e);
+            return null;
+        }
+    }*/
+
+
+>>>>>>> Stashed changes
 }

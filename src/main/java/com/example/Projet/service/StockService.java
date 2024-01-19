@@ -8,7 +8,17 @@ import java.util.Optional;
 
 public interface StockService {
     List<Stock> findAll();
+<<<<<<< Updated upstream
     Optional<Stock> findBySymbol(String symbol);
     Optional<StockValues> findStockValuesBySymbolAndDate(String symbol, String date);
 
+=======
+    /*List<Stock> findAll();
+    Stock findBySymbol(String symbol) throws Exception;
+    StockPriceDTO getStockPriceByDate(String symbol, String targetDate);
+    List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo);
+
+
+    Map.Entry<String, Float> findMostSearchedStock();*/
+>>>>>>> Stashed changes
 }

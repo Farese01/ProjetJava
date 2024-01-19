@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -20,7 +21,11 @@ public class StockEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+<<<<<<< Updated upstream
     @Column(name="Symbol")
+=======
+
+>>>>>>> Stashed changes
     private String symbol;
     @Column(name="Stock Values")
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,6 +33,7 @@ public class StockEntity {
     
 }
 
+<<<<<<< Updated upstream
 
   //  @Column(name="Open")
   //   Map<String, Float> open = new HashMap<>();
@@ -43,3 +49,15 @@ public class StockEntity {
     //Map<String, Float> count = new HashMap<>();
 
 }
+=======
+    private LocalDate lastRefreshed;
+
+    private Float count;
+
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
+    private List<DailyStockPrice> dailyPrices;
+
+    // Constructors, getters, and setters...
+
+}
+>>>>>>> Stashed changes
