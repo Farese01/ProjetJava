@@ -70,14 +70,8 @@ public class StockServiceImpl implements StockService {
                 LocalDate date = LocalDate.parse(dateEntry.getKey());
                 JsonNode priceData = dateEntry.getValue();
 
-                DailyStockPrice dailyStockPrice = new DailyStockPrice();
-                dailyStockPrice.setStock(stockEntity);
-                dailyStockPrice.setDate(date);
-                dailyStockPrice.setOpen((float) priceData.path("1. open").asDouble());
-                dailyStockPrice.setHigh((float) priceData.path("2. high").asDouble());
-                dailyStockPrice.setLow((float) priceData.path("3. low").asDouble());
-                dailyStockPrice.setClose((float) priceData.path("4. close").asDouble());
-                dailyStockPrice.setVolume(priceData.path("5. volume").asLong());
+                DailyStockPrice dailyStockPrice;
+                dailyStockPrice = new DailyStockPrice(stockEntity,date, (float) priceData.path("1. open").asDouble(), (float) priceData.path("2. high").asDouble(),(float) priceData.path("3. low").asDouble(),(float) priceData.path("4. close").asDouble(), priceData.path("5. volume").asLong());
 
                 dailyPrices.add(dailyStockPrice);
             }
