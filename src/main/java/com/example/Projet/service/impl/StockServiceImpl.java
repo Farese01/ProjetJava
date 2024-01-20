@@ -1,7 +1,9 @@
 package com.example.Projet.service.impl;
 
+import com.example.Projet.domain.StockOverview;
 import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.domain.StockValues;
+import com.example.Projet.mapper.StockOverviewMapper;
 import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
 import com.example.Projet.service.StockService;
@@ -29,9 +31,9 @@ public class StockServiceImpl implements StockService {
     private final StockEntityRepository stockEntityRepository;
 
     @Override
-    public List<StockValues> findAll() {
+    public List<StockOverview> findAll() {
         List<StockEntity> stockEntities = stockEntityRepository.findAll();
-        return StockValuesMapper.toList(stockEntities);
+        return StockOverviewMapper.toList(stockEntities);
     }
 
     public void fetchDataAndSave(String symbol) {

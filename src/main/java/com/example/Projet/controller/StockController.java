@@ -1,7 +1,7 @@
 package com.example.Projet.controller;
+import com.example.Projet.domain.StockOverview;
 import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.domain.StockValues;
-import com.example.Projet.entity.StockEntity;
 import com.example.Projet.service.StockService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class StockController {
     private final StockService stockService;
 
     @GetMapping()
-    public List<StockValues> getAll() {
+    public List<StockOverview> getAll() {
         return stockService.findAll();
     }
 
