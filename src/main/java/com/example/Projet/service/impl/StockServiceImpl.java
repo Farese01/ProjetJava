@@ -1,5 +1,6 @@
 package com.example.Projet.service.impl;
 
+import com.example.Projet.domain.Stock;
 import com.example.Projet.domain.StockValues;
 import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
@@ -13,14 +14,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Map;
 import java.io.IOException;
-import java.util.Iterator;
 
 @Service
 @AllArgsConstructor
@@ -93,7 +92,7 @@ public class StockServiceImpl implements StockService{
         return stockEntity;
     }
 
-
+    
 
 
 
