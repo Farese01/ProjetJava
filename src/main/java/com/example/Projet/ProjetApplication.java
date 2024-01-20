@@ -1,25 +1,14 @@
 package com.example.Projet;
-
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import com.example.Projet.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.Projet.entity.StockEntity;
 import com.example.Projet.repository.StockEntityRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 @SpringBootApplication

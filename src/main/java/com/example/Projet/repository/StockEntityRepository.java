@@ -12,5 +12,4 @@ public interface StockEntityRepository extends JpaRepository<StockEntity, UUID>{
     List<StockEntity> findAll();
     Optional <StockEntity> findBySymbol(String symbol);
 
-
 }

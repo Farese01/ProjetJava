@@ -23,7 +23,7 @@ public class StockController {
         return stockService.findAll();
     }
 
-    @GetMapping ("/price")
+    @GetMapping("/price")
     public Optional<StockPriceDTO> getStockPriceByDate(@RequestBody StockPriceRequest request) {
         String symbol = request.getSymbol();
         String date = request.getDate();
@@ -36,7 +36,6 @@ public class StockController {
         private String symbol;
         private String date;
     }
-
 
     @GetMapping("/prices-between-dates")
     public List<StockPriceDTO> getStockPricesBetweenDates(@RequestBody StockPriceRequestDates request) {
@@ -59,13 +58,19 @@ public class StockController {
     }
 
     @PostMapping("/create")
-    public void postStock(@RequestBody StockCreated request){
+    public void postStock(@RequestBody StockCreated request) {
         stockService.fetchDataAndSave(request.getSymbol());
 
     }
+
     @Data
     public static class StockCreated {
         private String symbol;
+    }
+
+    @GetMapping("/nextday/{symbol}")
+    public String suggestNextDayTrend(@PathVariable String symbol) {
+        return stockService.suggestNextDayTrend(symbol);
     }
 }
 

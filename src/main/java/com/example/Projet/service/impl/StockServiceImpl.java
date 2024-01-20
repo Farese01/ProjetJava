@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -99,9 +98,6 @@ public class StockServiceImpl implements StockService {
         if (stockEntityOptional.isPresent()) {
             StockEntity stockEntity = stockEntityOptional.get();
 
-
-            // Update count directly in dailyPrices
-
             if (stockEntity.getDailyPrices() != null) {
                 Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                         .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
@@ -109,7 +105,6 @@ public class StockServiceImpl implements StockService {
 
                 if (dailyPriceOptional.isPresent()) {
                     DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
-                    // Increment count for each stock price retrieval
 
                     dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
                     stockEntity.setCount(stockEntity.getCount()+1);
@@ -138,6 +133,7 @@ public class StockServiceImpl implements StockService {
                 StockEntity stockEntity = stockEntityOptional.get();
                 stockEntity.setCount(stockEntity.getCount()+1);
                 // Update count directly in dailyPrices for each date between dateFrom and dateTo
+
                 LocalDate fromDate = LocalDate.parse(dateFrom);
                 LocalDate toDate = LocalDate.parse(dateTo);
 
@@ -151,7 +147,6 @@ public class StockServiceImpl implements StockService {
                     ;
                 }
 
-                // Map to store stock prices for the specified date range
                 List<StockPriceDTO> stockPrices = new ArrayList<>();
 
                 stockEntity.getDailyPrices().stream()
@@ -184,8 +179,6 @@ public class StockServiceImpl implements StockService {
     public Map.Entry<String, Float> findMostSearchedStock() {
         try {
             List<StockEntity> stockEntities = stockEntityRepository.findAll();
-
-            // Map to store stock symbol and its total count
             Map<String, Float> totalCountMap = new HashMap<>();
 
             // Iterate through each stock entity and sum up the counts
@@ -197,14 +190,46 @@ public class StockServiceImpl implements StockService {
 
             return Collections.max(totalCountMap.entrySet(), Map.Entry.comparingByValue());
         } catch (Exception e) {
-            // Handle any exceptions (e.g., database access)
             log.error("Error finding most searched stock", e);
             return null;
         }
     }
+    public String suggestNextDayTrend(String symbol) {
+        try {
+            Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
 
+            if (stockEntityOptional.isPresent()) {
+                StockEntity stockEntity = stockEntityOptional.get();
+                
+                List<DailyStockPrice> historicalData = stockEntity.getDailyPrices();
 
+                if (historicalData.size() >= 2) {
+                    double sumReturns = 0.0;
+                    for (int i = 1; i < historicalData.size(); i++) {
+                        double previousClose = historicalData.get(i - 1).getClose();
+                        double currentClose = historicalData.get(i).getClose();
+                        double dailyReturn = (currentClose - previousClose) / previousClose;
+                        sumReturns += dailyReturn;
+                    }
+                    double averageDailyReturn = sumReturns / (historicalData.size() - 1);
 
+                    if (averageDailyReturn > 0) {
+                        return "Suggesting: Prices may go up.";
+                    } else if (averageDailyReturn < 0) {
+                        return "Suggesting: Prices may go down.";
+                    } else {
+                        return "Suggesting: Prices may stay the same.";
+                    }
+                } else {
+                    return "Insufficient data to provide a suggestion.";
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving stock prices", e);
+        }
+
+        return "Unable to provide a suggestion.";
+    }
 }
 
 
