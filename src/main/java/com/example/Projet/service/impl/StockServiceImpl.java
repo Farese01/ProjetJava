@@ -99,6 +99,7 @@ public class StockServiceImpl implements StockService {
         if (stockEntityOptional.isPresent()) {
             StockEntity stockEntity = stockEntityOptional.get();
 
+
             // Update count directly in dailyPrices
 
             if (stockEntity.getDailyPrices() != null) {
@@ -109,6 +110,7 @@ public class StockServiceImpl implements StockService {
                 if (dailyPriceOptional.isPresent()) {
                     DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
                     // Increment count for each stock price retrieval
+
                     dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
 
                     return StockPriceDTO.builder()

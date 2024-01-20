@@ -27,7 +27,7 @@ export class StockListComponent implements OnInit {
       });
   }
   getAllStocks(): Observable<Stock[]> {
-    const url = `${this.URL_STOCK}/stocks`;
+    const url = `${this.URL_STOCK}/stock`;
     return this.httpClient.get<Stock[]>(url);
   }
 }

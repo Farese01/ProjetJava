@@ -10,7 +10,7 @@ export class StockService {
   private stocksUrl: string;
 
   constructor(private http: HttpClient) {
-    this.stocksUrl = 'http://localhost:52001/stocks';
+    this.stocksUrl = 'http://localhost:52001/stock';
   }
 
   public findAll(): Observable<Stock[]> {

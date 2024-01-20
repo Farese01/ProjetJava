@@ -43,7 +43,7 @@ public class DailyStockPrice {
     private Long volume;
 
     @Column(name = "count")
-    private Integer count;
+    private int count = 0;
 
     public DailyStockPrice(StockEntity stock, LocalDate date, Float open, Float high, Float low, Float close, Long volume, Integer count) {
         this.stock = stock;

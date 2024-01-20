@@ -40,7 +40,7 @@ export class StockFormComponent implements OnInit{
       this.submitted = true;
       this.stock = this.form.value;
       this.stockService.save(this.stock).subscribe(res => {
-        this.router.navigate(['/stocks']);
+        this.router.navigate(['/stock']);
       });
 
     }
