@@ -1,6 +1,5 @@
 package com.example.Projet.service.impl;
 
-import com.example.Projet.domain.Stock;
 import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.domain.StockValues;
 import com.example.Projet.mapper.StockValuesMapper;
@@ -21,12 +20,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 
-public class StockServiceImpl implements StockService{
+public class StockServiceImpl implements StockService {
     private final StockEntityRepository stockEntityRepository;
 
     @Override
@@ -37,7 +37,7 @@ public class StockServiceImpl implements StockService{
 
     public void fetchDataAndSave(String symbol) {
         // Step 1: Use a REST client to fetch JSON data from the API
-        String apiUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&apikey=029SGZKEAAOV9PXE"; // Replace with the actual API URL
+        String apiUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=029SGZKEAAOV9PXE"; // Replace with the actual API URL
         RestTemplate restTemplate = new RestTemplate();
         String jsonString = restTemplate.getForObject(apiUrl, String.class);
 
@@ -100,7 +100,6 @@ public class StockServiceImpl implements StockService{
             StockEntity stockEntity = stockEntityOptional.get();
 
             // Update count directly in dailyPrices
-            stockEntity.updateCount(targetDate);
 
             if (stockEntity.getDailyPrices() != null) {
                 Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
@@ -126,6 +125,61 @@ public class StockServiceImpl implements StockService{
         }
         return null;
     }
+
+    @Override
+    public List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo) {
+        try {
+            Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
+
+            if (stockEntityOptional.isPresent()) {
+                StockEntity stockEntity = stockEntityOptional.get();
+
+                // Update count directly in dailyPrices for each date between dateFrom and dateTo
+                LocalDate fromDate = LocalDate.parse(dateFrom);
+                LocalDate toDate = LocalDate.parse(dateTo);
+
+                for (LocalDate currentDate = fromDate; currentDate.isBefore(toDate) || currentDate.isEqual(toDate); currentDate = currentDate.plusDays(1)) {
+                    LocalDate finalCurrentDate = currentDate;
+                    Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
+                            .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(finalCurrentDate.toString())))
+                            .findFirst();
+                    DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
+                    dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
+                    ;
+                }
+
+                // Map to store stock prices for the specified date range
+                List<StockPriceDTO> stockPrices = new ArrayList<>();
+
+                stockEntity.getDailyPrices().stream()
+                        .filter(dailyStockPrice -> {
+                            LocalDate currentDate = dailyStockPrice.getDate();
+                            return currentDate.isAfter(fromDate.minusDays(1)) && currentDate.isBefore(toDate.plusDays(1));
+                        })
+                        .forEach(dailyStockPrice -> {
+                            stockPrices.add(StockPriceDTO.builder()
+                                    .symbol(symbol)
+                                    .date(dailyStockPrice.getDate().toString())
+                                    .openValue(dailyStockPrice.getOpen())
+                                    .closeValue(dailyStockPrice.getClose())
+                                    .lowValue(dailyStockPrice.getLow())
+                                    .highValue(dailyStockPrice.getHigh())
+                                    .volumeValue(dailyStockPrice.getVolume())
+                                    .build());
+                        });
+
+                return stockPrices;
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving stock prices", e);
+        }
+
+        return Collections.emptyList();
+    }
+
+
+}
+
 
 
 
@@ -176,6 +230,3 @@ public class StockServiceImpl implements StockService{
         }
     }*/
 
-
-
-}

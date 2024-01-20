@@ -15,6 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StockController {
     private final StockService stockService;
+
     @GetMapping()
     public List<StockValues> getAll() {
         return stockService.findAll();
@@ -33,20 +34,7 @@ public class StockController {
         private String symbol;
         private String date;
     }
-    }
-    /*@PostMapping("/price")
-    public Optional<StockPriceDTO> getStockPriceBySymbolAndDate(@RequestBody StockPriceRequest request) {
-        String symbol = request.getSymbol();
-        LocalDate date = request.getDate();
-        StockPriceDTO stockPriceDTO = stockService.getStockPriceByDate(symbol, date);
-        return Optional.ofNullable(stockPriceDTO);
-    }
 
-    @Data
-    public static class StockPriceRequest {
-        private String symbol;
-        private LocalDate date;
-    }
 
     @GetMapping("/prices-between-dates")
     public List<StockPriceDTO> getStockPricesBetweenDates(@RequestBody StockPriceRequestDates request) {
@@ -55,6 +43,7 @@ public class StockController {
         String dateTo = request.getDateTo();
         return stockService.getStockPricesBetweenDates(symbol, dateFrom, dateTo);
     }
+
     @Data
     public static class StockPriceRequestDates {
         private String symbol;
@@ -62,9 +51,11 @@ public class StockController {
         private String dateTo;
     }
 
-    @GetMapping("/most-searched")
+    /* @GetMapping("/most-searched")
     public Optional<Map.Entry<String, Float>> getMostSearchedStock() {
         return Optional.ofNullable(stockService.findMostSearchedStock());
-    }*/
+    }
+     */
+}
 
 

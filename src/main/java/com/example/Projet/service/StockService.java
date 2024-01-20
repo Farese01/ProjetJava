@@ -10,6 +10,5 @@ public interface StockService {
     void fetchDataAndSave(String symbol);
 
     StockPriceDTO getStockPriceByDate(String symbol, String targetDate);
-
-
+    List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo);
 }

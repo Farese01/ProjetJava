@@ -32,15 +32,6 @@ public class StockEntity {
     private List<DailyStockPrice> dailyPrices;
 
 
-    public void updateCount(String targetDate) {
-        for (DailyStockPrice dailyStockPrice : dailyPrices) {
-            if (dailyStockPrice.getDate().equals(LocalDate.parse(targetDate))) {
-                // Increment count for each stock price retrieval
-                dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
-                return; // No need to continue searching if date is found
-            }
-
-        }
     }
-}
+
 
