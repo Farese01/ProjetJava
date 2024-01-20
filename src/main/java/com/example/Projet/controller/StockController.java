@@ -14,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("stock")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class StockController {
     private final StockService stockService;
 
@@ -57,6 +58,15 @@ public class StockController {
         return Optional.ofNullable(stockService.findMostSearchedStock());
     }
 
+    @PostMapping("/create")
+    public void postStock(@RequestBody StockCreated request){
+        stockService.fetchDataAndSave(request.getSymbol());
+
+    }
+    @Data
+    public static class StockCreated {
+        private String symbol;
+    }
 }
 
 

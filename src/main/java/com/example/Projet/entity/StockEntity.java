@@ -27,6 +27,7 @@ public class StockEntity {
 
     private LocalDate lastRefreshed;
 
+    private int count = 0;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<DailyStockPrice> dailyPrices;

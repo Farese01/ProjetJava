@@ -1,18 +1,18 @@
-<div class="card my-5">
-  <div class="card-body">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="symbol">Symbol</label>
-        <input type="text" [(ngModel)]="stock.symbol"
-               class="form-control"
-               id="symbol"
-               name="symbol"
-               placeholder="Enter the symbol of the stock"
-               required #name="ngModel">
+<h1 >Add Stock</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group col">
+      <label >Symbol</label>
+      <input type="text" formControlName="symbol" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['symbol'].errors }" />
+      <div *ngIf="submitted && f['symbol'].errors" class="invalid-feedback">
+        <div *ngIf="f['symbol'].errors['required']">Symbol is required</div>
       </div>
-      <div [hidden]="!name.pristine" class="alert alert-danger">Symbol is required</div>
-      <button type="submit" [disabled]="!form.valid"
-              class="btn btn-info">Submit</button>
-    </form>
+    </div>
   </div>
-</div>
+  <div class="form-group">
+    <p>
+      <button type="submit" class="btn btn-dark" [disabled]="!form.valid">Submit</button>
+      <a href="/stocks" class="btn btn-light">Cancel</a>
+    </p>
+  </div>
+</form>

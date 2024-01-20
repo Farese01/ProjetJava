@@ -15,13 +15,12 @@ import {HttpClient} from "@angular/common/http";
 export class StockFormComponent implements OnInit{
   form: FormGroup = new FormGroup({});
   submitted = false;
-  stock: Stock;
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private stockService: StockService) {
-    this.stock = new Stock();
-  }
+
+  stockToBeCreated: Stock | any;
+  constructor(private readonly httpClient: HttpClient,
+              private readonly stockService:  StockService,
+              private router: Router) { }
+
 
   ngOnInit(): void {
     this.loadForm();
@@ -29,20 +28,26 @@ export class StockFormComponent implements OnInit{
 
   loadForm(): void {
     this.form = new FormGroup({
-      id: new FormControl(null),
       symbol: new FormControl('', Validators.required),
     });
   }
 
-
   onSubmit(): void {
     if (this.form.valid) {
       this.submitted = true;
-      this.stock = this.form.value;
-      this.stockService.save(this.stock).subscribe(res => {
-        this.router.navigate(['/stock']);
+      this.stockToBeCreated = this.form.value;
+      this.stockService.save(this.stockToBeCreated).subscribe(res => {
+        this.router.navigate(['/']);
       });
+      console.log('Form submitted!', this.form.value);
 
     }
   }
+  get f() { return this.form.controls; }
+  private goToListStudents() {
+    this.router.navigate(['/students']);
+
+  }
+
+
 }

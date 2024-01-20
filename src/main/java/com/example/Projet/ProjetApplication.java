@@ -24,19 +24,19 @@ import java.util.List;
 
 @SpringBootApplication
 public class ProjetApplication {
-	@Autowired
-	private StockService stockService;
+	/*@Autowired
+	private StockService stockService;*/
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner demo(StockEntityRepository stockRepository) {
 		return (args) -> {
 			stockService.fetchDataAndSave("IBM");
 			System.out.println("Stock data fetched and saved successfully!");
 		};
-	}
+	}*/
 
 
 }

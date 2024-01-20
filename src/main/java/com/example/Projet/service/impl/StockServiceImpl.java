@@ -112,6 +112,8 @@ public class StockServiceImpl implements StockService {
                     // Increment count for each stock price retrieval
 
                     dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
+                    stockEntity.setCount(stockEntity.getCount()+1);
+                    System.out.println(stockEntity.getCount());
 
                     return StockPriceDTO.builder()
                             .symbol(symbol)
@@ -132,10 +134,9 @@ public class StockServiceImpl implements StockService {
     public List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo) {
         try {
             Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
-
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
-
+                stockEntity.setCount(stockEntity.getCount()+1);
                 // Update count directly in dailyPrices for each date between dateFrom and dateTo
                 LocalDate fromDate = LocalDate.parse(dateFrom);
                 LocalDate toDate = LocalDate.parse(dateTo);
@@ -156,6 +157,7 @@ public class StockServiceImpl implements StockService {
                 stockEntity.getDailyPrices().stream()
                         .filter(dailyStockPrice -> {
                             LocalDate currentDate = dailyStockPrice.getDate();
+                            System.out.println(currentDate.isAfter(fromDate.minusDays(1)) && currentDate.isBefore(toDate.plusDays(1)));
                             return currentDate.isAfter(fromDate.minusDays(1)) && currentDate.isBefore(toDate.plusDays(1));
                         })
                         .forEach(dailyStockPrice -> {
@@ -169,7 +171,6 @@ public class StockServiceImpl implements StockService {
                                     .volumeValue(dailyStockPrice.getVolume())
                                     .build());
                         });
-
                 return stockPrices;
             }
         } catch (Exception e) {
