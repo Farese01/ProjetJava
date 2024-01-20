@@ -196,12 +196,10 @@ public class StockServiceImpl implements StockService {
 
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
-
-                // Get historical data for calculating average daily return
+                
                 List<DailyStockPrice> historicalData = stockEntity.getDailyPrices();
 
                 if (historicalData.size() >= 2) {
-                    // Calculate average daily return
                     double sumReturns = 0.0;
                     for (int i = 1; i < historicalData.size(); i++) {
                         double previousClose = historicalData.get(i - 1).getClose();
@@ -211,7 +209,6 @@ public class StockServiceImpl implements StockService {
                     }
                     double averageDailyReturn = sumReturns / (historicalData.size() - 1);
 
-                    // Make suggestion based on average daily return
                     if (averageDailyReturn > 0) {
                         return "Suggesting: Prices may go up.";
                     } else if (averageDailyReturn < 0) {
