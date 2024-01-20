@@ -1,11 +1,11 @@
 package com.example.Projet.service;
 
-import com.example.Projet.entity.StockEntity;
+import com.example.Projet.domain.StockValues;
 
 import java.util.List;
 
 public interface StockService {
-    List<StockEntity> findAll();
+    List<StockValues> findAll();
     void fetchDataAndSave(String symbol);
 
 

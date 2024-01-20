@@ -1,5 +1,7 @@
 package com.example.Projet.service.impl;
 
+import com.example.Projet.domain.StockValues;
+import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
 import com.example.Projet.service.StockService;
 import com.example.Projet.entity.StockEntity;
@@ -28,8 +30,9 @@ public class StockServiceImpl implements StockService{
     private final StockEntityRepository stockEntityRepository;
 
     @Override
-    public List<StockEntity> findAll() {
-        return stockEntityRepository.findAll();
+    public List<StockValues> findAll() {
+        List<StockEntity> stockEntities = stockEntityRepository.findAll();
+        return StockValuesMapper.toList(stockEntities);
     }
 
     public void fetchDataAndSave(String symbol) {
@@ -71,10 +74,10 @@ public class StockServiceImpl implements StockService{
                 DailyStockPrice dailyStockPrice = new DailyStockPrice();
                 dailyStockPrice.setStock(stockEntity);
                 dailyStockPrice.setDate(date);
-                dailyStockPrice.setOpen(priceData.path("1. open").asDouble());
-                dailyStockPrice.setHigh(priceData.path("2. high").asDouble());
-                dailyStockPrice.setLow(priceData.path("3. low").asDouble());
-                dailyStockPrice.setClose(priceData.path("4. close").asDouble());
+                dailyStockPrice.setOpen((float) priceData.path("1. open").asDouble());
+                dailyStockPrice.setHigh((float) priceData.path("2. high").asDouble());
+                dailyStockPrice.setLow((float) priceData.path("3. low").asDouble());
+                dailyStockPrice.setClose((float) priceData.path("4. close").asDouble());
                 dailyStockPrice.setVolume(priceData.path("5. volume").asLong());
 
                 dailyPrices.add(dailyStockPrice);
@@ -89,6 +92,9 @@ public class StockServiceImpl implements StockService{
 
         return stockEntity;
     }
+
+
+
 
 
     /*@Override
