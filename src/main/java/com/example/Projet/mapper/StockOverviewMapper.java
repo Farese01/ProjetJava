@@ -17,7 +17,7 @@ public class StockOverviewMapper {
         List<Float> high = stockEntity.getDailyPrices().stream().map(DailyStockPrice::getHigh).collect(Collectors.toList());
         List<Float> low = stockEntity.getDailyPrices().stream().map(DailyStockPrice::getLow).collect(Collectors.toList());
         List<Long> volume = stockEntity.getDailyPrices().stream().map(DailyStockPrice::getVolume).collect(Collectors.toList());
-        List<Integer> count = stockEntity.getDailyPrices().stream().map(DailyStockPrice::getCount).collect(Collectors.toList());
+        //List<Integer> count = stockEntity.getDailyPrices().stream().map(DailyStockPrice::getCount).collect(Collectors.toList());
 
         return StockOverview.builder()
                 .symbol(stockEntity.getSymbol())
@@ -27,7 +27,7 @@ public class StockOverviewMapper {
                 .high(high)
                 .low(low)
                 .volume(volume)
-                .count(count)
+                .count(List.of(stockEntity.getCount()))
                 .build();
     }
 

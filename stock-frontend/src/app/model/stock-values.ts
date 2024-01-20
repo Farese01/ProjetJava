@@ -6,4 +6,5 @@ export class StockValues {
   public high: number[] | undefined;
   public low: number[] | undefined;
   public volume: number[] | undefined;
+  public count: number[] | undefined;
 }
