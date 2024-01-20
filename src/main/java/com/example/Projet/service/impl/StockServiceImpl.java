@@ -190,8 +190,43 @@ public class StockServiceImpl implements StockService {
             return null;
         }
     }
+    public String suggestNextDayTrend(String symbol) {
+        try {
+            Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
 
+            if (stockEntityOptional.isPresent()) {
+                StockEntity stockEntity = stockEntityOptional.get();
 
+                LocalDate latestDate = stockEntity.getDailyPrices().stream()
+                        .map(DailyStockPrice::getDate)
+                        .max(Comparator.naturalOrder())
+                        .orElse(LocalDate.now());
+
+                LocalDate nextDate = latestDate.plusDays(1);
+
+                List<DailyStockPrice> pricesForNextDate = stockEntity.getDailyPrices().stream()
+                        .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(nextDate))
+                        .toList();
+
+                if (!pricesForNextDate.isEmpty()) {
+                    double averageOpen = pricesForNextDate.stream().mapToDouble(DailyStockPrice::getOpen).average().orElse(0.0);
+                    double averageClose = pricesForNextDate.stream().mapToDouble(DailyStockPrice::getClose).average().orElse(0.0);
+
+                    if (averageClose > averageOpen) {
+                        return "Suggesting: Prices may go up.";
+                    } else if (averageClose < averageOpen) {
+                        return "Suggesting: Prices may go down.";
+                    } else {
+                        return "Suggesting: Prices may stay the same.";
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving stock prices", e);
+        }
+
+        return "Unable to provide a suggestion.";
+    }
 
 }
 

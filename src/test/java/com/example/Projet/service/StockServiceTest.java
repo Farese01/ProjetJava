@@ -121,6 +121,35 @@ public class StockServiceTest {
 
         assertNull(result);
     }
+
+
+    @Test
+    void testSuggestNextDayTrend() {
+
+        String symbol = "AAPL";
+
+        StockEntity stockEntity = createMockStockEntity(symbol);
+        when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
+
+        String result = stockService.suggestNextDayTrend(symbol);
+
+        assertNotNull(result);
+        assertTrue(result.contains("Suggesting:"));
+    }
+
+    @Test
+    void testSuggestNextDayTrendNoData() {
+
+        String symbol = "AAPL";
+
+        when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.empty());
+
+        String result = stockService.suggestNextDayTrend(symbol);
+
+        assertEquals("Unable to provide a suggestion.", result);
+    }
+
+
     private StockEntity createMockStockEntity(String symbol) {
         StockEntity stockEntity = new StockEntity();
         stockEntity.setSymbol(symbol);

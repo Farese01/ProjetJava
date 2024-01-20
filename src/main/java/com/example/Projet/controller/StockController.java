@@ -36,7 +36,6 @@ public class StockController {
         private String date;
     }
 
-
     @GetMapping("/prices-between-dates")
     public List<StockPriceDTO> getStockPricesBetweenDates(@RequestBody StockPriceRequestDates request) {
         String symbol = request.getSymbol();
@@ -56,6 +55,9 @@ public class StockController {
     public Optional<Map.Entry<String, Float>> getMostSearchedStock() {
         return Optional.ofNullable(stockService.findMostSearchedStock());
     }
+
+    @GetMapping("/nextday/{symbol}")
+    public String suggestNextDayTrend(@PathVariable String symbol) {return stockService.suggestNextDayTrend(symbol);}
 
 }
 

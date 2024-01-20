@@ -12,4 +12,5 @@ public interface StockService {
     StockPriceDTO getStockPriceByDate(String symbol, String targetDate);
     List<StockPriceDTO> getStockPricesBetweenDates(String symbol, String dateFrom, String dateTo);
     Map.Entry<String, Float> findMostSearchedStock();
+    String suggestNextDayTrend(String symbol);
 }
