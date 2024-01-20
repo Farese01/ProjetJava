@@ -32,7 +32,7 @@ public class StockServiceTest {
     void setUp() {
         stockService = new StockServiceImpl(stockEntityRepository);
     }
-    
+
     @Test
     void testGetStockPricesBetweenDates() {
         // Mock data
@@ -43,15 +43,11 @@ public class StockServiceTest {
         StockEntity stockEntity = createMockStockEntity(symbol);
         when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
 
-        // Perform the test
         List<StockPriceDTO> result = stockService.getStockPricesBetweenDates(symbol, dateFrom, dateTo);
 
-        // Verify the result
         assertNotNull(result);
         assertFalse(result.isEmpty());
-        // Add more assertions based on your implementation
 
-        // Verify that the count is incremented for each date
         for (LocalDate currentDate = LocalDate.parse(dateFrom); currentDate.isBefore(LocalDate.parse(dateTo).plusDays(1)); currentDate = currentDate.plusDays(1)) {
             LocalDate finalCurrentDate = currentDate;
             Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
@@ -63,23 +59,19 @@ public class StockServiceTest {
     }
     @Test
     void testGetStockPriceByDate() {
-        // Mock data
+
         String symbol = "AAPL";
         String targetDate = "2022-01-15";
 
         StockEntity stockEntity = createMockStockEntity(symbol);
         when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
 
-        // Perform the test
         StockPriceDTO result = stockService.getStockPriceByDate(symbol, targetDate);
 
-        // Verify the result
         assertNotNull(result);
         assertEquals(symbol, result.getSymbol());
         assertEquals(targetDate, result.getDate());
-        // Add more assertions based on your implementation
-
-        // Verify that the count is incremented
+        d
         Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                 .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
                 .findFirst();
@@ -89,20 +81,17 @@ public class StockServiceTest {
 
     @Test
     void testGetStockPriceByDateNotFound() {
-        // Mock data
+
         String symbol = "AAPL";
         String targetDate = "2022-01-18";
 
         StockEntity stockEntity = createMockStockEntity(symbol);
         when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
 
-        // Perform the test
         StockPriceDTO result = stockService.getStockPriceByDate(symbol, targetDate);
 
-        // Verify the result
         assertNull(result);
 
-        // Verify that the count is not incremented for a non-existent date
         Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                 .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
                 .findFirst();
@@ -111,31 +100,26 @@ public class StockServiceTest {
 
     @Test
     void testFindMostSearchedStock() {
-        // Mock data
+
         StockEntity stockEntity1 = createMockStockEntity("AAPL");
         StockEntity stockEntity2 = createMockStockEntity("GOOGL");
         List<StockEntity> stockEntities = List.of(stockEntity1, stockEntity2);
 
         when(stockEntityRepository.findAll()).thenReturn(stockEntities);
 
-        // Perform the test
         Map.Entry<String, Float> result = stockService.findMostSearchedStock();
 
-        // Verify the result
         assertNotNull(result);
         assertEquals("AAPL", result.getKey());
-        // Add more assertions based on your implementation
     }
 
     @Test
     void testFindMostSearchedStockEmptyList() {
-        // Mock an empty list of stock entities
+
         when(stockEntityRepository.findAll()).thenReturn(new ArrayList<>());
 
-        // Perform the test
         Map.Entry<String, Float> result = stockService.findMostSearchedStock();
-
-        // Verify the result
+        
         assertNull(result);
     }
     private StockEntity createMockStockEntity(String symbol) {

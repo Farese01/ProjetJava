@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -99,9 +98,6 @@ public class StockServiceImpl implements StockService {
         if (stockEntityOptional.isPresent()) {
             StockEntity stockEntity = stockEntityOptional.get();
 
-
-            // Update count directly in dailyPrices
-
             if (stockEntity.getDailyPrices() != null) {
                 Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                         .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
@@ -109,7 +105,6 @@ public class StockServiceImpl implements StockService {
 
                 if (dailyPriceOptional.isPresent()) {
                     DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
-                    // Increment count for each stock price retrieval
 
                     dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
 
@@ -135,8 +130,6 @@ public class StockServiceImpl implements StockService {
 
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
-
-                // Update count directly in dailyPrices for each date between dateFrom and dateTo
                 LocalDate fromDate = LocalDate.parse(dateFrom);
                 LocalDate toDate = LocalDate.parse(dateTo);
 
@@ -150,7 +143,6 @@ public class StockServiceImpl implements StockService {
                     ;
                 }
 
-                // Map to store stock prices for the specified date range
                 List<StockPriceDTO> stockPrices = new ArrayList<>();
 
                 stockEntity.getDailyPrices().stream()
@@ -183,8 +175,6 @@ public class StockServiceImpl implements StockService {
     public Map.Entry<String, Float> findMostSearchedStock() {
         try {
             List<StockEntity> stockEntities = stockEntityRepository.findAll();
-
-            // Map to store stock symbol and its total count
             Map<String, Float> totalCountMap = new HashMap<>();
 
             // Iterate through each stock entity and sum up the counts
@@ -196,7 +186,6 @@ public class StockServiceImpl implements StockService {
 
             return Collections.max(totalCountMap.entrySet(), Map.Entry.comparingByValue());
         } catch (Exception e) {
-            // Handle any exceptions (e.g., database access)
             log.error("Error finding most searched stock", e);
             return null;
         }

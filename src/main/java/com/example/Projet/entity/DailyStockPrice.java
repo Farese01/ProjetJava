@@ -45,16 +45,5 @@ public class DailyStockPrice {
     @Column(name = "count")
     private int count = 0;
 
-    public DailyStockPrice(StockEntity stock, LocalDate date, Float open, Float high, Float low, Float close, Long volume, Integer count) {
-        this.stock = stock;
-        this.date = date;
-        this.open = open;
-        this.high = high;
-        this.low = low;
-        this.close = close;
-        this.volume = volume;
-        this.count = count;
-    }
-
 }
 
