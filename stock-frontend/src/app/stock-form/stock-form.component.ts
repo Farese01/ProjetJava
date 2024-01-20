@@ -44,10 +44,7 @@ export class StockFormComponent implements OnInit{
     }
   }
   get f() { return this.form.controls; }
-  private goToListStudents() {
-    this.router.navigate(['/students']);
 
-  }
 
 
 }

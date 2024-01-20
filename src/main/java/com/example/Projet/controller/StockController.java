@@ -14,7 +14,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("stock")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:4200/getpricebydate"})
+
 public class StockController {
     private final StockService stockService;
 

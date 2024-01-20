@@ -3,12 +3,16 @@
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
       <tr>
-        <th scope="col">symbol</th>
+        <th scope="col">Symbol</th>
+        <th scope="col">Search Count</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let stock of stocks">
         <td>{{ stock.symbol }}</td>
+      </tr>
+      <tr *ngFor="let stock of stocks">
+        <td>{{ stock.count }}</td>
       </tr>
       </tbody>
     </table>
