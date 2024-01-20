@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 import java.util.Optional;
 import java.util.List;
+@Repository
 public interface StockEntityRepository extends JpaRepository<StockEntity, UUID>{
     List<StockEntity> findAll();
     Optional <StockEntity> findBySymbol(String symbol);
 
-    StockEntity getStockPriceByDate (String symbol, String targetDate);
 
 }
