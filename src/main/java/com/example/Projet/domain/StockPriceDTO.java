@@ -1,8 +1,10 @@
 package com.example.Projet.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public record StockPriceDTO(
         String symbol,
         String date,
@@ -12,4 +14,5 @@ public record StockPriceDTO(
         Float highValue,
         Long volumeValue
 ) {
+
 }
