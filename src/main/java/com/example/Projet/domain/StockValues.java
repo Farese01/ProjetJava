@@ -10,5 +10,5 @@ public record StockValues() {
     static Float high,
     static Float low,
     static Float volume,
-    Integer count
+    static Integer count
 }
