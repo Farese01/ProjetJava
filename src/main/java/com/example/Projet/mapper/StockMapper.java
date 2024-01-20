@@ -13,9 +13,6 @@ public class StockMapper {
         return Stock.builder()
                 .id(entity.getId())
                 .symbol(entity.getSymbol())
-                .stockValuesMap(entity.getStockValuesMap().entrySet()
-                        .stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, e -> StockValuesMapper.toStockValues(e.getValue()))))
                 .build();
     }
 

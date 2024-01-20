@@ -33,7 +33,7 @@ public class ProjetApplication {
 	@Bean
 	public CommandLineRunner demo(StockEntityRepository stockRepository) {
 		return (args) -> {
-			stockService.fetchDataAndSave("AAPL");
+			stockService.fetchDataAndSave("KO");
 			System.out.println("Stock data fetched and saved successfully!");
 		};
 	}
