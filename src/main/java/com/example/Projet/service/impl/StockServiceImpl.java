@@ -197,28 +197,30 @@ public class StockServiceImpl implements StockService {
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
 
-                LocalDate latestDate = stockEntity.getDailyPrices().stream()
-                        .map(DailyStockPrice::getDate)
-                        .max(Comparator.naturalOrder())
-                        .orElse(LocalDate.now());
+                // Get historical data for calculating average daily return
+                List<DailyStockPrice> historicalData = stockEntity.getDailyPrices();
 
-                LocalDate nextDate = latestDate.plusDays(1);
+                if (historicalData.size() >= 2) {
+                    // Calculate average daily return
+                    double sumReturns = 0.0;
+                    for (int i = 1; i < historicalData.size(); i++) {
+                        double previousClose = historicalData.get(i - 1).getClose();
+                        double currentClose = historicalData.get(i).getClose();
+                        double dailyReturn = (currentClose - previousClose) / previousClose;
+                        sumReturns += dailyReturn;
+                    }
+                    double averageDailyReturn = sumReturns / (historicalData.size() - 1);
 
-                List<DailyStockPrice> pricesForNextDate = stockEntity.getDailyPrices().stream()
-                        .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(nextDate))
-                        .toList();
-
-                if (!pricesForNextDate.isEmpty()) {
-                    double averageOpen = pricesForNextDate.stream().mapToDouble(DailyStockPrice::getOpen).average().orElse(0.0);
-                    double averageClose = pricesForNextDate.stream().mapToDouble(DailyStockPrice::getClose).average().orElse(0.0);
-
-                    if (averageClose > averageOpen) {
+                    // Make suggestion based on average daily return
+                    if (averageDailyReturn > 0) {
                         return "Suggesting: Prices may go up.";
-                    } else if (averageClose < averageOpen) {
+                    } else if (averageDailyReturn < 0) {
                         return "Suggesting: Prices may go down.";
                     } else {
                         return "Suggesting: Prices may stay the same.";
                     }
+                } else {
+                    return "Insufficient data to provide a suggestion.";
                 }
             }
         } catch (Exception e) {
@@ -227,7 +229,6 @@ public class StockServiceImpl implements StockService {
 
         return "Unable to provide a suggestion.";
     }
-
 }
 
 

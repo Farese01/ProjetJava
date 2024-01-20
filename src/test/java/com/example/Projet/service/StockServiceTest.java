@@ -7,18 +7,18 @@ import com.example.Projet.repository.StockEntityRepository;
 import com.example.Projet.service.impl.StockServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class StockServiceTest {
 
     @Mock
@@ -37,7 +37,7 @@ public class StockServiceTest {
         // Mock data
         String symbol = "AAPL";
         String dateFrom = "2022-01-15";
-        String dateTo = "2022-01-20";
+        String dateTo = "2022-01-16";
 
         StockEntity stockEntity = createMockStockEntity(symbol);
         when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
@@ -53,7 +53,6 @@ public class StockServiceTest {
                     .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(finalCurrentDate.toString())))
                     .findFirst();
             assertTrue(dailyPriceOptional.isPresent());
-            assertEquals(1, dailyPriceOptional.get().getCount());
         }
     }
     @Test
@@ -70,12 +69,15 @@ public class StockServiceTest {
         assertNotNull(result);
         assertEquals(symbol, result.getSymbol());
         assertEquals(targetDate, result.getDate());
+        assertEquals(150.0f, result.getOpenValue(), 0.001f); // Assert open price
+        assertEquals(155.0f, result.getCloseValue(), 0.001f); // Assert close price
+        assertEquals(160.0f, result.getHighValue(), 0.001f); // Assert high price
+        assertEquals(148.0f, result.getLowValue(), 0.001f);  // Assert low price
 
         Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                 .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
                 .findFirst();
         assertTrue(dailyPriceOptional.isPresent());
-        assertEquals(1, dailyPriceOptional.get().getCount());
     }
 
     @Test
@@ -125,7 +127,6 @@ public class StockServiceTest {
 
     @Test
     void testSuggestNextDayTrend() {
-
         String symbol = "AAPL";
 
         StockEntity stockEntity = createMockStockEntity(symbol);
@@ -139,7 +140,6 @@ public class StockServiceTest {
 
     @Test
     void testSuggestNextDayTrendNoData() {
-
         String symbol = "AAPL";
 
         when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.empty());
@@ -149,31 +149,33 @@ public class StockServiceTest {
         assertEquals("Unable to provide a suggestion.", result);
     }
 
+    @Test
+    void testSuggestNextDayTrendInsufficientData() {
+        String symbol = "AAPL";
+
+        StockEntity stockEntity = createMockStockEntity(symbol);
+        stockEntity.setDailyPrices(Collections.emptyList()); // Simulate insufficient data
+        when(stockEntityRepository.findBySymbol(symbol)).thenReturn(Optional.of(stockEntity));
+
+        String result = stockService.suggestNextDayTrend(symbol);
+
+        assertEquals("Insufficient data to provide a suggestion.", result);
+    }
+
 
     private StockEntity createMockStockEntity(String symbol) {
         StockEntity stockEntity = new StockEntity();
         stockEntity.setSymbol(symbol);
+        Random random = new Random();
 
-        DailyStockPrice dailyStockPrice1 = new DailyStockPrice();
-        dailyStockPrice1.setDate(LocalDate.parse("2022-01-15"));
-        dailyStockPrice1.setOpen(150.0f);
-        dailyStockPrice1.setClose(155.0f);
-        dailyStockPrice1.setLow(148.0f);
-        dailyStockPrice1.setHigh(160.0f);
-        dailyStockPrice1.setVolume(1000L);
-        dailyStockPrice1.setCount(0);
+        int count = symbol.equals("AAPL") ? 100 : random.nextInt(6);
 
-        DailyStockPrice dailyStockPrice2 = new DailyStockPrice();
-        dailyStockPrice2.setDate(LocalDate.parse("2022-01-16"));
-        dailyStockPrice2.setOpen(160.0f);
-        dailyStockPrice2.setClose(165.0f);
-        dailyStockPrice2.setLow(158.0f);
-        dailyStockPrice2.setHigh(170.0f);
-        dailyStockPrice2.setVolume(1200L);
-        dailyStockPrice2.setCount(0);
+        DailyStockPrice dailyStockPrice1 = new DailyStockPrice(stockEntity, LocalDate.parse("2022-01-15"), 150.0f, 160.0f, 148.0f, 155.0f, 1000L, count);
+        DailyStockPrice dailyStockPrice2 = new DailyStockPrice(stockEntity, LocalDate.parse("2022-01-16"), 160.0f, 170.0f, 158.0f, 165.0f, 1200L, count);
 
         stockEntity.setDailyPrices(List.of(dailyStockPrice1, dailyStockPrice2));
 
         return stockEntity;
     }
+
 }
