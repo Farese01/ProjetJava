@@ -1,11 +1,14 @@
 package com.example.Projet.controller;
+import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.domain.StockValues;
 import com.example.Projet.entity.StockEntity;
 import com.example.Projet.service.StockService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("stock")
@@ -16,16 +19,21 @@ public class StockController {
     public List<StockValues> getAll() {
         return stockService.findAll();
     }
-    /*
-<<<<<<< Updated upstream
 
-    @GetMapping("/symbol/{symbol}/date/{date}")
-    public ResponseEntity<StockValues> getStockValuesBySymbolAndDate(@PathVariable String symbol,
-                                                                     @PathVariable String date) {
-        Optional<StockValues> stockValues = stockService.findStockValuesBySymbolAndDate(symbol, date);
-        return stockValues.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-=======
+    @PostMapping("/price")
+    public Optional<StockPriceDTO> getStockPriceBySymbolAndDate(@RequestBody StockPriceRequest request) {
+        String symbol = request.getSymbol();
+        String date = request.getDate();
+        StockPriceDTO stockPriceDTO = stockService.getStockPriceByDate(symbol, date);
+        return Optional.ofNullable(stockPriceDTO);
+    }
+
+    @Data
+    public static class StockPriceRequest {
+        private String symbol;
+        private String date;
+    }
+    }
     /*@PostMapping("/price")
     public Optional<StockPriceDTO> getStockPriceBySymbolAndDate(@RequestBody StockPriceRequest request) {
         String symbol = request.getSymbol();
@@ -59,4 +67,4 @@ public class StockController {
         return Optional.ofNullable(stockService.findMostSearchedStock());
     }*/
 
-}
+

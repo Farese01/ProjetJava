@@ -22,16 +22,25 @@ public class StockEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name="Symbol")
+    @Column(name = "Symbol")
     private String symbol;
 
     private LocalDate lastRefreshed;
 
-    private Integer count;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<DailyStockPrice> dailyPrices;
 
 
+    public void updateCount(String targetDate) {
+        for (DailyStockPrice dailyStockPrice : dailyPrices) {
+            if (dailyStockPrice.getDate().equals(LocalDate.parse(targetDate))) {
+                // Increment count for each stock price retrieval
+                dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
+                return; // No need to continue searching if date is found
+            }
+
+        }
+    }
 }
 

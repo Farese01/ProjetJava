@@ -1,6 +1,7 @@
 package com.example.Projet.service.impl;
 
 import com.example.Projet.domain.Stock;
+import com.example.Projet.domain.StockPriceDTO;
 import com.example.Projet.domain.StockValues;
 import com.example.Projet.mapper.StockValuesMapper;
 import com.example.Projet.repository.StockEntityRepository;
@@ -92,7 +93,42 @@ public class StockServiceImpl implements StockService{
         return stockEntity;
     }
 
-    
+    public StockPriceDTO getStockPriceByDate(String symbol, String targetDate) {
+        Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
+
+        if (stockEntityOptional.isPresent()) {
+            StockEntity stockEntity = stockEntityOptional.get();
+
+            // Update count directly in dailyPrices
+            stockEntity.updateCount(targetDate);
+
+            if (stockEntity.getDailyPrices() != null) {
+                Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
+                        .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
+                        .findFirst();
+
+                if (dailyPriceOptional.isPresent()) {
+                    DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
+                    // Increment count for each stock price retrieval
+                    dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
+
+                    return StockPriceDTO.builder()
+                            .symbol(symbol)
+                            .date(targetDate)
+                            .openValue(dailyStockPrice.getOpen())
+                            .closeValue(dailyStockPrice.getClose())
+                            .lowValue(dailyStockPrice.getLow())
+                            .highValue(dailyStockPrice.getHigh())
+                            .volumeValue(dailyStockPrice.getVolume())
+                            .build();
+                }
+            }
+        }
+        return null;
+    }
+
+
+
 
 
 

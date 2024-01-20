@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 @Builder
 public record Stock(
-        String symbol,
-        Integer count
+        String symbol
 ) {
 }

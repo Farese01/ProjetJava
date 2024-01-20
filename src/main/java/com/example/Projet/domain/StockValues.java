@@ -3,17 +3,18 @@ package com.example.Projet.domain;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Builder
 public record StockValues(
         String symbol,
-        LocalDate date,
-        Float open,
-        Float close,
-        Float high,
-        Float low,
-        Long volume
+        List<LocalDate> dates,
+        List<Float> open,
+        List<Float> close,
+        List<Float> high,
+        List<Float> low,
+        List<Long> volume
 ) {
 
 }
