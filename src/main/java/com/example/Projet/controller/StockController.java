@@ -22,7 +22,7 @@ public class StockController {
         return stockService.findAll();
     }
 
-    @PostMapping("/price")
+    @GetMapping ("/price")
     public Optional<StockPriceDTO> getStockPriceByDate(@RequestBody StockPriceRequest request) {
         String symbol = request.getSymbol();
         String date = request.getDate();
