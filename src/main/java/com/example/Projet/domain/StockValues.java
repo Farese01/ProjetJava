@@ -7,6 +7,7 @@ import java.util.List;
 
 
 @Builder
+
 public record StockValues(
         String symbol,
         List<LocalDate> dates,
