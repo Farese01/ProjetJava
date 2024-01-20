@@ -178,36 +178,6 @@ public class StockServiceImpl implements StockService {
     }
 
 
-}
-
-
-
-
-
-
-
-    /*@Override
->>>>>>> Stashed changes
-    public List<Stock> findAll() {
-        List<StockEntity> entities = stockEntityRepository.findAll();
-        return StockMapper.toList(entities);
-    }
-
-    @Override
-    public Optional<Stock> findBySymbol(String symbol) {
-        Optional<StockEntity> entityOptional = stockEntityRepository.findBySymbol(symbol);
-        return entityOptional.map(StockMapper::toStock);
-    }
-
-    @Override
-    public Optional<StockValues> findStockValuesBySymbolAndDate(String symbol, String date) {
-        Optional<StockEntity> entityOptional = stockEntityRepository.findBySymbol(symbol);
-        return entityOptional.map(entity -> StockValuesMapper.toStockValues(entity.getStockValuesMap().get(date)));
-    }
-<<<<<<< Updated upstream
-=======
-
-
     public Map.Entry<String, Float> findMostSearchedStock() {
         try {
             List<StockEntity> stockEntities = stockEntityRepository.findAll();
@@ -217,8 +187,8 @@ public class StockServiceImpl implements StockService {
 
             // Iterate through each stock entity and sum up the counts
             stockEntities.forEach(stockEntity -> {
-                stockEntity.getCount().forEach((date, count) -> {
-                    totalCountMap.put(stockEntity.getSymbol(), totalCountMap.getOrDefault(stockEntity.getSymbol(), 0f) + count);
+                stockEntity.getDailyPrices().forEach(dailyStockPrice -> {
+                    totalCountMap.put(stockEntity.getSymbol(), totalCountMap.getOrDefault(stockEntity.getSymbol(), 0f) + dailyStockPrice.getCount());
                 });
             });
 
@@ -228,5 +198,14 @@ public class StockServiceImpl implements StockService {
             log.error("Error finding most searched stock", e);
             return null;
         }
-    }*/
+    }
+
+
+}
+
+
+
+
+
+
 
