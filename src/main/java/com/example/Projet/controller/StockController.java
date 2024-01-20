@@ -1,4 +1,5 @@
 package com.example.Projet.controller;
+import com.example.Projet.domain.StockValues;
 import com.example.Projet.entity.StockEntity;
 import com.example.Projet.service.StockService;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 public class StockController {
     private final StockService stockService;
     @GetMapping()
-    public List<StockEntity> getAll() {
+    public List<StockValues> getAll() {
         return stockService.findAll();
     }
     /*

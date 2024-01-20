@@ -28,22 +28,21 @@ public class DailyStockPrice {
     private LocalDate date;
 
     @Column(name = "open_price")
-    private Double open;
+    private Float open;
 
     @Column(name = "high_price")
-    private Double high;
+    private Float high;
 
     @Column(name = "low_price")
-    private Double low;
+    private Float low;
 
     @Column(name = "close_price")
-    private Double close;
+    private Float close;
 
+    @Column(name = "volume")
     private Long volume;
 
-    // Constructors, getters, and setters...
-
-    public DailyStockPrice(StockEntity stock, LocalDate date, Double open, Double high, Double low, Double close, Long volume) {
+    public DailyStockPrice(StockEntity stock, LocalDate date, Float open, Float high, Float low, Float close, Long volume) {
         this.stock = stock;
         this.date = date;
         this.open = open;
@@ -53,6 +52,5 @@ public class DailyStockPrice {
         this.volume = volume;
     }
 
-    // Constructors, getters, and setters...
 }
 

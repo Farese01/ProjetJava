@@ -27,12 +27,11 @@ public class StockEntity {
 
     private LocalDate lastRefreshed;
 
-    private Float count;
+    private Integer count;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<DailyStockPrice> dailyPrices;
 
-    // Constructors, getters, and setters...
 
 }
 
