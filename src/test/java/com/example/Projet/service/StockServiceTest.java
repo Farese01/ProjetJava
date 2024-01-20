@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class StockServiceTest {
         assertNotNull(result);
         assertEquals(symbol, result.getSymbol());
         assertEquals(targetDate, result.getDate());
-        
+
         Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                 .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
                 .findFirst();
