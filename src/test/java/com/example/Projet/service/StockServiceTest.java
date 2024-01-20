@@ -71,7 +71,7 @@ public class StockServiceTest {
         assertNotNull(result);
         assertEquals(symbol, result.getSymbol());
         assertEquals(targetDate, result.getDate());
-        d
+        
         Optional<DailyStockPrice> dailyPriceOptional = stockEntity.getDailyPrices().stream()
                 .filter(dailyStockPrice -> dailyStockPrice.getDate().equals(LocalDate.parse(targetDate)))
                 .findFirst();
@@ -119,7 +119,7 @@ public class StockServiceTest {
         when(stockEntityRepository.findAll()).thenReturn(new ArrayList<>());
 
         Map.Entry<String, Float> result = stockService.findMostSearchedStock();
-        
+
         assertNull(result);
     }
     private StockEntity createMockStockEntity(String symbol) {
