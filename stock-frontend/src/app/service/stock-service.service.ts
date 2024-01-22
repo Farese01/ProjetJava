@@ -16,12 +16,14 @@ export class StockService {
   private createStockUrl: string;
   private stocksPriceUrl: string;
   private stocksPriceBetweenUrl: string;
+  private nextDayTrendUrl: string;
 
   constructor(private http: HttpClient) {
     this.stocksUrl = 'http://localhost:52001/stock';
-    this.createStockUrl = 'http://localhost:52001/stock/create'
-    this.stocksPriceUrl = 'http://localhost:52001/stock/price'
-    this.stocksPriceBetweenUrl = 'http://localhost:52001/stock/prices-between-dates'
+    this.createStockUrl = 'http://localhost:52001/stock/create';
+    this.stocksPriceUrl = 'http://localhost:52001/stock/price';
+    this.stocksPriceBetweenUrl = 'http://localhost:52001/stock/prices-between-dates';
+    this.nextDayTrendUrl = "http://localhost:52001/stock/nextday/";
   }
 
   public findAll(): Observable<Stock[]> {
@@ -44,4 +46,15 @@ export class StockService {
     return this.http.get<StockValues>(this.stocksPriceBetweenUrl+"?symbol="+priceBetween.symbol+"&dateFrom="+priceBetween.dateFrom+"&dateTo="+priceBetween.dateTo);
 
   }
+
+  public GetMostSearchedStock() : Observable<string> {
+
+      return this.http.get<string>(this.stocksUrl+"/most-searched");
+  }
+
+  public suggestNextDayTrend(symbol: string) : Observable<string>{
+
+      // @ts-ignore
+      return this.http.get<string>(this.nextDayTrendUrl+symbol, { responseType: 'text' });
+    }
 }
