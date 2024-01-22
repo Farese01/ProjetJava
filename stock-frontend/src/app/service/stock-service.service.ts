@@ -5,6 +5,8 @@ import { Stock } from '../model/stock';
 import { Observable } from 'rxjs/Observable';
 import {Dailyprice} from "../model/dailyprice";
 import {StockDate} from "../model/stock-date";
+import {PriceBetween} from "../model/price-between";
+import {StockValues} from "../model/stock-values";
 
 @Injectable()
 export class StockService {
@@ -32,9 +34,14 @@ export class StockService {
   }
 
   public findStockPriceByDate(stockDate: StockDate ): Observable<Dailyprice> {
-      const headers = { 'content-type': 'application/json'};
-      // @ts-ignore
-      return this.http.get<Dailyprice>(this.stocksPriceUrl, stockDate);
+
+      return this.http.get<Dailyprice>(this.stocksPriceUrl+"?symbol="+stockDate.symbol+"&date="+stockDate.date);
+
+  }
+
+  public findStockPriceBetweenDates(priceBetween: PriceBetween ): Observable<StockValues> {
+
+    return this.http.get<StockValues>(this.stocksPriceBetweenUrl+"?symbol="+priceBetween.symbol+"&dateFrom="+priceBetween.dateFrom+"&dateTo="+priceBetween.dateTo);
 
   }
 }

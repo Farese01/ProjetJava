@@ -19,5 +19,5 @@ import {StockService} from "./service/stock-service.service";
   providers: [StockService]
 })
 export class AppComponent {
-  title = 'stock-frontend';
+  title = 'Vicres - Financial Informations';
 }

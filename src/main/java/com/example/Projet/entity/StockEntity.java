@@ -14,7 +14,7 @@ import java.util.*;
 @Table(name = "stock")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
 
 public class StockEntity {
@@ -28,10 +28,17 @@ public class StockEntity {
     private LocalDate lastRefreshed;
 
 
-    private int count = 0;
+    private int count;
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<DailyStockPrice> dailyPrices;
 
+    public StockEntity(){
+        this.count = 0;
+    }
+
+    public void addCount(){
+        this.count++;
+    }
 
     }
 

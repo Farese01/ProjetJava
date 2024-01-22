@@ -1,5 +1,5 @@
 export class Dailyprice {
-    constructor(s: string, s2: string, number: number, number2: number, number3: number, number4: number, number5: number) {
+    constructor() {
 
     }
 

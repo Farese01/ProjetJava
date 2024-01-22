@@ -103,7 +103,8 @@ public class StockServiceImpl implements StockService {
                     DailyStockPrice dailyStockPrice = dailyPriceOptional.get();
 
                     dailyStockPrice.setCount(dailyStockPrice.getCount() + 1);
-                    stockEntity.setCount(stockEntity.getCount()+1);
+                    stockEntity.addCount();
+                    stockEntityRepository.save(stockEntity);
                     System.out.println(stockEntity.getCount());
 
                     return StockPriceDTO.builder()
@@ -127,7 +128,8 @@ public class StockServiceImpl implements StockService {
             Optional<StockEntity> stockEntityOptional = stockEntityRepository.findBySymbol(symbol);
             if (stockEntityOptional.isPresent()) {
                 StockEntity stockEntity = stockEntityOptional.get();
-                stockEntity.setCount(stockEntity.getCount()+1);
+                stockEntity.addCount();
+                stockEntityRepository.save(stockEntity);
                 // Update count directly in dailyPrices for each date between dateFrom and dateTo
 
                 LocalDate fromDate = LocalDate.parse(dateFrom);

@@ -1,10 +1,13 @@
 export class StockValues {
-  public symbol: string | undefined;
-  public dates: string[] | undefined;
-  public open: number[] | undefined;
-  public close: number[] | undefined;
-  public high: number[] | undefined;
-  public low: number[] | undefined;
-  public volume: number[] | undefined;
-  public count: number[] | undefined;
+
+  constructor() {
+
+  }
+  public symbol: string[] | undefined;
+  public date: string[] | undefined;
+  public openValue: number[] | undefined;
+  public closeValue: number[] | undefined;
+  public highValue: number[] | undefined;
+  public lowValue: number[] | undefined;
+  public Volume: number[] | undefined;
 }

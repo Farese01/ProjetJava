@@ -16,7 +16,7 @@ import {CommonModule} from "@angular/common";
 })
 export class GetStockPriceByDateComponent {
 
-  dailyPrice:Dailyprice = new Dailyprice("0","0",0,0,0,0,0);
+  dailyPrice:Dailyprice = new Dailyprice();
   formPrice: FormGroup = new FormGroup({});
   submitted = false;
   stockDate: StockDate | any;
@@ -35,7 +35,7 @@ export class GetStockPriceByDateComponent {
   }
   ngOnInit(): void {
     this.loadForm();
-    this.dailyPrice = new Dailyprice("0","0",0,0,0,0,0);
+    this.dailyPrice = new Dailyprice();
 
   }
 

@@ -25,9 +25,9 @@ public class StockController {
     }
 
     @GetMapping("/price")
-    public Optional<StockPriceDTO> getStockPriceByDate(@RequestBody StockPriceRequest request) {
-        String symbol = request.getSymbol();
-        String date = request.getDate();
+    public Optional<StockPriceDTO> getStockPriceByDate(@RequestParam(name = "symbol") String symbol,
+                                                       @RequestParam(name = "date") String date)  {
+
         StockPriceDTO stockPriceDTO = stockService.getStockPriceByDate(symbol, date);
         return Optional.ofNullable(stockPriceDTO);
     }
@@ -39,10 +39,10 @@ public class StockController {
     }
 
     @GetMapping("/prices-between-dates")
-    public List<StockPriceDTO> getStockPricesBetweenDates(@RequestBody StockPriceRequestDates request) {
-        String symbol = request.getSymbol();
-        String dateFrom = request.getDateFrom();
-        String dateTo = request.getDateTo();
+    public List<StockPriceDTO> getStockPricesBetweenDates(@RequestParam(name = "symbol") String symbol,
+                                                          @RequestParam(name = "dateFrom") String dateFrom,
+                                                          @RequestParam(name = "dateTo") String dateTo) {
+
         return stockService.getStockPricesBetweenDates(symbol, dateFrom, dateTo);
     }
 
